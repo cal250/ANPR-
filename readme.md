@@ -65,18 +65,18 @@ The system validates the OCR output against standard regional patterns using Reg
 You can easily add new regional formats by appending to the `PLATE_PATTERNS` list in `src/validate.py`.
 
 ## Sample Screenshots
-Here is a visual breakdown of the ANPR pipeline in action:
+Here is a visual breakdown of the ANPR pipeline in action using example plate `RAD117K` (from `data/captures/RAD117K.png`):
 
 ### 1. Plate Detection
-![Plate Detection](screenshots/detection.png)
+![Plate Detection (RAD117K)](screenshots/detection.png)
 
-### 2. Plate Alignment (Captured Plate)
-*When a plate is successfully detected and temporally confirmed, its cropped image is automatically saved to the `data/captures/` directory (e.g., `data/captures/RAE327H.png`).*
-![Aligned Plate](screenshots/alignment.png)
+### 2. Plate Alignment (RAD117K)
+*When a plate is successfully detected and temporally confirmed, its cropped image is automatically saved to the `data/captures/` directory (e.g., `data/captures/RAD117K.png`).*
+![Aligned Plate (RAD117K)](screenshots/alignment.png)
 
 ### 3. OCR Image Pre-processing
 *This shows the processed plate image used to feed Tesseract OCR with better contrast, thresholding, and noise cleaning.*
-![OCR Process](screenshots/ocr.png)
+![OCR Process (RAD117K)](screenshots/ocr.png)
 
 ### 4. Captured Plates Gallery
 The pipeline writes verified plate captures to `data/captures/` after passing validation and temporal consistency checks. Each file is named with the recognized plate text and timestamp (example: `RAE327H_20260320_150237.png`).

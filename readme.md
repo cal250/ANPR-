@@ -74,8 +74,8 @@ Here is a visual breakdown of the ANPR pipeline in action using the current repo
 *When a plate is successfully detected and temporally confirmed, its cropped image is automatically saved to the `data/captures/` directory.*
 ![Aligned Plate](screenshots/alignment.png)
 
-### 3. OCR Image Pre-processing
-*This shows the processed plate image used to feed Tesseract OCR with better contrast, thresholding, and noise cleaning.*
+### 3. OCR Image Pre-processing (from screenshots/ocr.png)
+*This is the actual OCR pre-processing image stored in `screenshots/ocr.png`, used to feed Tesseract OCR with better contrast, thresholding, and noise cleaning.*
 ![OCR Process](screenshots/ocr.png)
 
 ### 4. Captured Plates Gallery

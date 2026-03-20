@@ -27,13 +27,35 @@ anpr-project/
 │   ├── temporal.py
 │   ├── storage.py
 │   └── main.py
-├── data/
-│   ├── plates.csv
-│   └── captures/
 └── screenshots/
     ├── detection.png
     ├── alignment.png
     └── ocr.png
+
+## Quick Start
+
+### 1. Install Tesseract OCR
+This project requires **Tesseract OCR** to be installed on your system.
+- **Windows**: Download and install from [UB-Mannheim/tesseract](https://github.com/UB-Mannheim/tesseract/wiki). Ensure it's installed to `C:\Program Files\Tesseract-OCR`.
+- **Linux**: `sudo apt install tesseract-ocr`
+- **macOS**: `brew install tesseract`
+
+### 2. Install Dependencies
+Run the following command to install the necessary Python libraries:
+```bash
+pip install -r requirements.txt
+```
+
+### 3. Run the Project
+To start the ANPR pipeline, simply run the `run.py` script from the project root:
+```bash
+python run.py
+```
+*Note: Make sure your webcam is connected.*
+
+## Key Controls
+- **'s'**: Save debug screenshots (detection, alignment, and OCR steps) to the `screenshots/` directory.
+- **'q'**: Quit the application.
 
 ## Supported Plate Formats
 The system validates the OCR output against standard regional patterns using Regular Expressions. Currently supported formats in `src/validate.py` include:

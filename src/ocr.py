@@ -1,9 +1,29 @@
 import cv2
 import pytesseract
 import re
+import os
+import shutil
 
 # Set your Tesseract path here if needed on Windows:
-pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
+# We first check if 'tesseract' is already in the system path.
+T_EXE = shutil.which("tesseract")
+
+# If not in path, try common Windows default installation locations
+if not T_EXE:
+    COMMON_PATHS = [
+        r"C:\Program Files\Tesseract-OCR\tesseract.exe",
+        r"C:\Users\pc\AppData\Local\Tesseract-OCR\tesseract.exe",
+        r"C:\Program Files (x86)\Tesseract-OCR\tesseract.exe"
+    ]
+    for path in COMMON_PATHS:
+        if os.path.exists(path):
+            T_EXE = path
+            break
+
+if T_EXE:
+    pytesseract.pytesseract.tesseract_cmd = T_EXE
+else:
+    print("[WARNING] Tesseract executable not found. Please install Tesseract or set the path in src/ocr.py.")
 
 
 def preprocess_for_ocr(plate_img):

@@ -29,7 +29,8 @@ anpr-project/
 │   └── main.py
 └── screenshots/
     ├── detection.png
-    └── alignment.png
+    ├── alignment.png
+    └── ocr.png
 
 ## Quick Start
 
@@ -73,7 +74,11 @@ Here is a visual breakdown of the ANPR pipeline in action:
 *When a plate is successfully detected and temporally confirmed, its cropped image is automatically saved to the `data/captures/` directory (e.g., `data/captures/RAE327H.png`).*
 ![Aligned Plate](screenshots/alignment.png)
 
-### 3. Captured Plates Gallery
+### 3. OCR Image Pre-processing
+*This shows the processed plate image used to feed Tesseract OCR with better contrast, thresholding, and noise cleaning.*
+![OCR Process](screenshots/ocr.png)
+
+### 4. Captured Plates Gallery
 The pipeline writes verified plate captures to `data/captures/` after passing validation and temporal consistency checks. Each file is named with the recognized plate text and timestamp (example: `RAE327H_20260320_150237.png`).
 
 - Review saved images to verify detection quality.

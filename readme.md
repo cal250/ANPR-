@@ -29,8 +29,7 @@ anpr-project/
 │   └── main.py
 └── screenshots/
     ├── detection.png
-    ├── alignment.png
-    └── ocr.png
+    └── alignment.png
 
 ## Quick Start
 
@@ -73,6 +72,3 @@ Here is a visual breakdown of the ANPR pipeline in action:
 ### 2. Plate Alignment (Captured Plate)
 *When a plate is successfully detected and temporally confirmed, its cropped image is automatically saved to the `data/captures/` directory (e.g., `data/captures/RAE327H.png`).*
 ![Aligned Plate](screenshots/alignment.png)
-
-### 3. OCR Image Pre-processing
-![OCR Process](screenshots/ocr.png)

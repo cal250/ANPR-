@@ -72,3 +72,10 @@ Here is a visual breakdown of the ANPR pipeline in action:
 ### 2. Plate Alignment (Captured Plate)
 *When a plate is successfully detected and temporally confirmed, its cropped image is automatically saved to the `data/captures/` directory (e.g., `data/captures/RAE327H.png`).*
 ![Aligned Plate](screenshots/alignment.png)
+
+### 3. Captured Plates Gallery
+The pipeline writes verified plate captures to `data/captures/` after passing validation and temporal consistency checks. Each file is named with the recognized plate text and timestamp (example: `RAE327H_20260320_150237.png`).
+
+- Review saved images to verify detection quality.
+- Confirm OCR results via `data/plates.csv` entries.
+- Use these images for further model tuning (noise reduction, perspective correction, OCR training dataset).

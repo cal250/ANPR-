@@ -28,6 +28,10 @@ def detect_plate(frame):
 
     edged = cv2.Canny(gray, 30, 200)
 
+    # Force individual text characters to merge into a single solid rectangular blob
+    kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (25, 7))
+    edged = cv2.morphologyEx(edged, cv2.MORPH_CLOSE, kernel)
+
     contours = cv2.findContours(edged.copy(), cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
     contours = imutils.grab_contours(contours)
     contours = sorted(contours, key=cv2.contourArea, reverse=True)[:20]
@@ -35,28 +39,30 @@ def detect_plate(frame):
     candidates = []
 
     for cnt in contours:
-        peri = cv2.arcLength(cnt, True)
+        # Use a rotated bounding box instead of strict 4-point approximation
+        # This handles hand-drawn or occluded plates (e.g. held by fingers) where contours are broken.
+        rect = cv2.minAreaRect(cnt)
+        (x, y), (w, h), angle = rect
         
-        for eps_mult in [0.01, 0.02, 0.03, 0.04, 0.05]:
-            approx = cv2.approxPolyDP(cnt, eps_mult * peri, True)
+        if w == 0 or h == 0:
+            continue
+            
+        aspect_ratio = max(w/h, h/w)
+        area = w * h
 
-            if len(approx) == 4:
-                x, y, w, h = cv2.boundingRect(approx)
-                area = w * h
-                aspect_ratio = w / float(h) if h > 0 else 0
+        # rough plate-like shape
+        if 2.0 <= aspect_ratio <= 6.5 and area > 1000:
+            box = cv2.boxPoints(rect)
+            box = np.array(box, dtype=np.int32)
+            candidates.append((area, box))
 
-                # rough plate-like shape
-                if 2.0 <= aspect_ratio <= 6.5 and area > 1000:
-                    candidates.append((area, approx))
-                break
-
-    # Sort candidates by area descending and take top 3
-    candidates = sorted(candidates, key=lambda x: x[0], reverse=True)[:3]
+    # Sort candidates by area descending and take top 5
+    candidates = sorted(candidates, key=lambda x: x[0], reverse=True)[:5]
     
     ordered_candidates = []
     for area, quad in candidates:
         cv2.drawContours(debug_frame, [quad], -1, (0, 255, 0), 2)
-        pts = quad.reshape(4, 2)
+        pts = np.array(quad, dtype="float32")
         ordered_candidates.append(order_points(pts))
 
     return ordered_candidates, debug_frame

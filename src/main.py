@@ -5,7 +5,7 @@ from camera import open_camera
 from detect import detect_plate
 from align import align_plate
 from ocr import read_plate_text
-from validate import is_valid_plate
+from validate import is_valid_plate, extract_plate
 from temporal import TemporalConfirm
 from storage import PlateStorage
 
@@ -41,6 +41,7 @@ def main():
             break
 
         # ===== 1. DETECTION =====
+        should_autosave_debug = False
         candidates, debug_frame = detect_plate(frame)
 
         aligned_plate = None
@@ -66,20 +67,21 @@ def main():
 
                 if is_valid:
                     valid = True
+                    plate_text = extract_plate(text_cand)
                     # ===== 5. TEMPORAL CONFIRM =====
                     confirmed = temporal.update(plate_text)
 
                     # ===== 6. SAVE =====
                     if confirmed:
-                        saved = storage.save_plate(confirmed)
+                        # Auto save screenshots
+                        os.makedirs("data/captures", exist_ok=True)
+                        fname = f"data/captures/{confirmed}.png"
+
+                        saved = storage.save_plate(confirmed, fname)
                         if saved:
-                            print(f"[SAVED] {confirmed}")
-                            
-                            # Auto save screenshots
-                            os.makedirs("data/captures", exist_ok=True)
-                            fname = f"data/captures/{confirmed}.png"
-                            cv2.imwrite(fname, frame)
-                            print(f"[CAPTURE] Saved {fname}")
+                            cv2.imwrite(fname, aligned_plate)
+                            print(f"[SAVED] {confirmed} saved to DB and {fname}")
+                            should_autosave_debug = True
                     
                     break
 
@@ -105,6 +107,10 @@ def main():
         if ocr_img is not None:
             cv2.imshow("OCR Input", ocr_img)
             last_ocr_img = ocr_img
+
+        if should_autosave_debug:
+            save_debug_screenshots(display_frame, aligned_plate, ocr_img)
+            print("[INFO] Auto-saved debug screenshots to 'screenshots/' directory")
 
         key = cv2.waitKey(1) & 0xFF
 
